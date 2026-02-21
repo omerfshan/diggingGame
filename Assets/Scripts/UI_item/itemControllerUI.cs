@@ -1,16 +1,49 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class itemControllerUI : MonoBehaviour
+public class itemControllerUI : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    private RectTransform rectTransform;
+    private Canvas canvas;
+    private Vector2 offset;
+
+    void Awake()
     {
-        
+        rectTransform=GetComponent<RectTransform>();
+        canvas = GetComponentInParent<Canvas>();
+
+    }
+    public void OnPointerDown(PointerEventData eventData)
+    {
+       Vector2 localPoint;
+       RectTransformUtility.ScreenPointToLocalPointInRectangle(
+        canvas.transform as RectTransform,
+        eventData.position,
+        canvas.worldCamera,
+        out localPoint
+       );
+       offset=rectTransform.anchoredPosition-localPoint;
+    }
+    public void OnDrag(PointerEventData eventData)
+    {
+         Vector2 localPoint;
+         if( RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvas.transform as RectTransform,
+                eventData.position,
+                canvas.worldCamera,
+                out localPoint
+            ))
+        {
+            rectTransform.anchoredPosition=localPoint+offset;
+        }
+       
     }
 
-    // Update is called once per frame
-    void Update()
+   
+
+    public void OnPointerUp(PointerEventData eventData)
     {
-        
+       Debug.Log($"{eventData} bırakıldıu");
     }
 }

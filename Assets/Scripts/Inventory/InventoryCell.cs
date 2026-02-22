@@ -1,21 +1,52 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryCell : MonoBehaviour
 {
-    public ItemControllerUI currentItem;
+    public Image img;
+    public bool is_filled;
 
-    public bool IsEmpty()
+   
+    public static readonly Color EmptyColor  = new Color(0.7f, 0.7f, 0.7f); 
+    public static readonly Color FilledColor = Color.white;                  
+    public static readonly Color ValidColor  = new Color(0.2f, 1f, 0.2f);   
+    public static readonly Color InvalidColor= new Color(1f, 0.3f, 0.3f);    
+
+    private void Awake()
     {
-        return currentItem == null;
+        img = GetComponent<Image>();
+    }
+    
+   public void Refresh()
+{
+    if (this == null || img == null)
+        return;
+
+    if (is_filled)
+        img.color = FilledColor;
+    else
+        img.color = EmptyColor;
+}
+    public void SetEmpty()
+    {
+        img.color = EmptyColor;
     }
 
-    public void SetItem(ItemControllerUI item)
+   
+    public void SetFilled()
     {
-        currentItem = item;
+        img.color = FilledColor;
     }
 
-    public void Clear()
+   
+    public void SetValid()
     {
-        currentItem = null;
+        img.color = ValidColor;
+    }
+
+ 
+    public void SetInvalid()
+    {
+        img.color = InvalidColor;
     }
 }
